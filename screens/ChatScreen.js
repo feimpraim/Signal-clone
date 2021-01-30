@@ -5,15 +5,19 @@ import {
   View,
   Platform,
   TouchableWithoutFeedback,
+  ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
+  Keyboard,
+  KeyboardAvoidingView,
+  TextInput,
 } from "react-native";
 import { Avatar } from "react-native-elements";
-import { TouchableOpacity } from "react-native";
+
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native";
+
 import { StatusBar } from "expo-status-bar";
-import { KeyboardAvoidingView, ScrollView } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { Keyboard } from "react-native";
+
 import { db, auth } from "../firebase";
 import * as firebase from "firebase";
 
@@ -104,7 +108,7 @@ const ChatScreen = ({ navigation, route }) => {
       );
 
     return unsubscribe;
-  }, [navigation]);
+  }, [route]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -117,15 +121,23 @@ const ChatScreen = ({ navigation, route }) => {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
+            {/* react fragment */}
             <ScrollView>
               {messages.map(({ id, data }) =>
                 data.email === auth.currentUser.email ? (
-                  <View key={id} style={styles.reciever}></View>
+                  <View key={id} style={styles.reciever}>
+                    <Avatar />
+                    <Text style={styles.recieverText}>{data.message}</Text>
+                  </View>
                 ) : (
-                  <View key={id} style={styles.sender}></View>
+                  <View key={id} style={styles.sender}>
+                    <Avatar />
+                    <Text style={styles.senderText}>{data.message}</Text>
+                  </View>
                 )
               )}
             </ScrollView>
+            {/* end scroll view */}
             <View style={styles.footer}>
               <TextInput
                 value={input}
@@ -139,6 +151,7 @@ const ChatScreen = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
           </>
+          {/* react fracment */}
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
